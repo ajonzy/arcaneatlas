@@ -1,0 +1,277 @@
+.editor-tools-wrapper {
+    @include toolsStyles();
+
+    input {
+        width: 75px;
+        padding-left: 10px
+    }
+
+    .custom-file-upload {
+        @include inputStyles();
+        @include buttonStyles();
+    }
+    
+    input[type="file"] {
+        display: none;
+    }
+
+    .map-pieces-wrapper {
+        width: fit-content;
+        display: grid;
+        grid-template: 1fr 1fr 1fr / 1fr 1fr 1fr;
+        justify-content: center;
+        gap: 10px;
+
+        .map-piece {
+            @include inputStyles();
+    
+            width: 75px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            cursor: pointer;
+    
+            &.selected {
+                border-color: #A0522D;
+                box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2), 0 0 15px rgba(0, 4, 245, 0.4);
+            }
+        }
+
+        .custom-tooltip {
+            position: relative;
+            display: inline-block;
+        
+            .tooltip-text {
+                visibility: hidden;
+                width: 120px;
+                background-color: #fdeab5; 
+                color: #3E2723; 
+                text-align: center;
+                border-radius: 5px; 
+                padding: 5px;
+                position: absolute;
+                z-index: 1;
+                bottom: 105%;
+                left: 50%;
+                margin-left: -60px;
+                opacity: 0;
+                transition: opacity 0.3s;
+                border: 2px solid #8B4513;
+                font-family: 'Times New Roman', Times, serif;
+                box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2), inset 0 0 10px rgba(0, 4, 245, 0.2), inset 0 0 20px rgba(0, 4, 245, 0.15); 
+            }
+        
+            &:hover .tooltip-text {
+                visibility: visible;
+                opacity: 1;
+                border-color: #A0522D; 
+                box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2), 0 0 15px rgba(0, 4, 245, 0.4), inset 0 0 10px rgba(0, 4, 245, 0.2), inset 0 0 20px rgba(0, 4, 245, 0.15); 
+            }
+        }        
+    }
+
+    .layout-wrapper {
+        h4 {
+            margin-top: 10px;
+
+            &.disabled {
+                @include disabledStyles("text");
+            }
+        }
+
+        .grid-layout-wrapper, .map-layout-wrapper {
+            flex-direction: row;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px 70px;
+            
+    
+            label {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+                color: #3E2723;
+                font-size: .9em;
+
+                &.disabled {
+                    @include disabledStyles("text");
+                }
+            }
+        }
+    }
+
+    .upload-wrapper, .save-wrapper {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+}
+
+.react-modal-overlay {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 4;
+}
+
+.react-modal-content {
+    width: 80%;
+    background-color: #fdeab5;
+    border-radius: 5px;
+    padding: 20px;
+    position: relative;
+    overflow: auto;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5), inset 0 0 10px rgba(0, 4, 245, 0.2), inset 0 0 200px rgba(0, 4, 245, 0.15);
+
+    .cropper-container {
+        @include inputStyles();
+    }
+
+    .cropper-view-box {
+        width: calc(100% - 4px);
+        height: calc(100% - 4px);
+    }
+
+    .cropper-line {
+        opacity: 0;
+    }
+
+    .cropper-buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+        }
+    }
+
+    .cropper-preview-wrapper {
+        flex-direction: row;
+        gap: 20px;
+
+        .token-preview {
+            flex: 1;
+            justify-content: center;
+            align-items: center;
+
+            input {
+                margin-bottom: 40px;
+            }
+
+            .token-type-buttons {
+                gap: 10px;
+                margin-bottom: 40px;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+
+                button.selected {
+                    border-color: #A0522D;
+                    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2), 0 0 15px rgba(0, 4, 245, 0.4);
+                }
+            }
+        }
+    }
+
+    h3 {
+        margin: 0px;
+        margin-bottom: 10px;
+    }
+
+    .maps-wrapper {
+        height: 300px;
+        gap: 10px;
+        padding: 10px;
+        margin-bottom: 10px;
+        background-color: rgba(253, 234, 181, 0.5); 
+        border-radius: 5px; 
+        overflow-y: auto; 
+        box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+    
+        .map {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            padding: 5px;
+            text-align: left;
+            background-color: #fdeab5;
+            border: 2px solid #8B4513;
+            border-radius: 5px; 
+            cursor: pointer; 
+            transition: 0.2s; 
+    
+            &:hover, &:focus {
+                background-color: #fbe492; 
+                box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); 
+            }
+
+            .map-name {
+                flex: 1;
+                overflow: hidden;
+                text-overflow: ellipsis;
+
+                &::before {
+                    content: '\1F4C1'; 
+                    margin-right: 5px;
+                }
+            }
+        }
+    }
+    
+
+    .save-load-buttons {
+        display: grid;
+        grid-template-columns: 1fr 120px 120px;
+        gap: 10px;
+    }
+
+    .map-delete-confirm {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+
+        .map-delete-content {
+            height: 200px;
+            width: 50%;
+            gap: 10px;
+            padding: 10px;
+            background-color: rgba(253, 234, 181); 
+            border-radius: 5px; 
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5), inset 0 0 10px rgba(0, 4, 245, 0.2), inset 0 0 100px rgba(0, 4, 245, 0.15);
+            justify-content: space-between;
+
+            h3 {
+                flex: 1;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+    
+            .delete-buttons {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+    
+                button {
+                    margin: 10px;
+                    padding: 10px 20px;
+                }
+            }
+        }
+    }
+
+    &:focus {
+        outline: none;
+    }
+}

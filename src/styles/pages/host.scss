@@ -1,0 +1,95 @@
+.host-wrapper {
+    h1 {
+        margin: 0px;
+        font-size: 2rem;
+    }
+
+    p {
+        margin: 0px;
+        font-size: 1.15rem;
+    }
+
+    .new-session {
+        padding: 20px;
+        align-items: center;
+        
+        .button-wrapper {
+            margin-top: 50px;
+            gap: 10px;
+            width: 200px;
+        }
+    }
+
+    .ongoing-sessions-wrapper {
+        padding: 20px;
+        
+        .ongoing-sessions {
+            align-items: center;
+            gap: 10px;
+
+            .session {
+                width: 400px;
+                display: flex;
+                align-items: flex-end;
+                justify-content: space-between;
+                padding: 5px;
+                text-align: left;
+                background-color: #fdeab5;
+                border: 2px solid #8B4513;
+                border-radius: 5px; 
+                cursor: pointer; 
+                transition: 0.2s; 
+        
+                &:hover, &:focus {
+                    background-color: #fbe492; 
+                    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); 
+                }
+
+                .session-name {
+                    flex: 1;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+            }
+        }
+    }
+
+    .session-delete-confirm {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+
+        .session-delete-content {
+            height: 200px;
+            width: 50%;
+            gap: 10px;
+            padding: 10px;
+            background-color: rgba(253, 234, 181); 
+            border-radius: 5px; 
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5), inset 0 0 10px rgba(0, 4, 245, 0.2), inset 0 0 100px rgba(0, 4, 245, 0.15);
+            justify-content: space-between;
+
+            h3 {
+                flex: 1;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+    
+            .delete-buttons {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+    
+                button {
+                    margin: 10px;
+                    padding: 10px 20px;
+                }
+            }
+        }
+    }
+}

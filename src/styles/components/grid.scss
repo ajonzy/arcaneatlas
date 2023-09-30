@@ -1,0 +1,127 @@
+.grid-map-wrapper {
+    @mixin mapPiecesStyles {
+        .map-piece, .map-piece * {
+            height: 100%;
+            width: 100%;
+
+            .line {
+                background-color: #CCCCCC; 
+            }
+            
+            .square {
+                background-color: #000000; 
+                
+                &.revealed {
+                    background-color: initial;
+                }
+            }
+            
+            .wall {
+                background-color: #CCCCCC; 
+                
+                &.revealed {
+                    background-color: #000000; 
+                }
+            }
+            
+            .door {
+                background-color: #CCCCCC; 
+                
+                &.revealed {
+                    background-color: #8B4513; 
+                }
+            }
+            
+            .hidden-door {
+                background-color: #CCCCCC; 
+                
+                &.revealed {
+                    background-color: #000000; 
+
+                    &.discovered {
+                        background-color: #DAA520; 
+                    }
+                }
+            }
+            
+            .window {
+                background-color: #CCCCCC; 
+                
+                &.revealed {
+                    background-color: #87CEFA; 
+                }
+            }
+            
+            .hidden-window {
+                background-color: #CCCCCC; 
+                
+                &.revealed {
+                    background-color: #000000; 
+
+                    &.discovered {
+                        background-color: #DAA520; 
+                    }
+                }
+            }
+
+            .trap {
+                background-color: #FF4500; 
+            }
+
+            .secret {
+                background-color: #800080; 
+            }
+        }
+    }
+
+    margin: 20px;
+    background-color: white;
+    overflow: hidden;
+    position: relative;
+    transform: translateX(320px);
+    
+    .grid-wrapper {
+        width: fit-content;
+        height: fit-content;
+        display: grid;
+        position: absolute;
+        cursor: pointer;
+    
+        .grid-line {
+            height: 5px;
+            width: 5px;
+            z-index: 2;
+
+            @include mapPiecesStyles();
+        }
+    
+        .grid-line-vertical {
+            height: 50px;
+            padding: 0px 1px;
+            margin: 0px -1px;
+        }
+        
+        .grid-line-horizontal {
+            width: 50px;
+            padding: 1px 0px;
+            margin: -1px 0px;
+        }
+
+        .grid-square {
+            width: 50px;
+            height: 50px;
+            z-index: 1;
+
+            @include mapPiecesStyles();
+        }
+    
+        .filler {
+            height: 0px;
+            width: 0px;
+        }
+    }
+
+    .map-wrapper {
+        position: absolute;
+    }
+}

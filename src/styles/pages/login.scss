@@ -1,0 +1,65 @@
+.login-signup-wrapper {
+    .main-content {
+      flex: 1;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+  
+      .auth-section {
+        background: rgba(255, 255, 255, 0.8);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        max-width: 400px;
+        width: 100%;
+        text-align: center;
+  
+        h1 {
+          margin-bottom: 0px;
+          font-size: 2rem;
+        }
+  
+        p {
+          margin-top: 10px;
+          margin-bottom: 40px;
+          font-size: 1.15rem;
+        }
+  
+        .auth-form {
+          .form-group {
+            margin-bottom: 20px;
+  
+            label {
+              display: block;
+              margin-bottom: 10px;
+            }
+  
+            input {
+              width: 100%;
+            }
+          }
+  
+          button {
+            width: 100%;
+            padding: 10px;
+          }
+        }
+  
+        .switch-auth-type {
+          margin-top: 20px;
+          font-size: 0.9rem;
+  
+          span {
+            color: #6495ED;
+            cursor: pointer;
+            margin-left: 5px;
+  
+            &:hover {
+              text-decoration: underline;
+            }
+          }
+        }
+      }
+    }
+  }
+  

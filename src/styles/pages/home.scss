@@ -1,0 +1,33 @@
+.home-wrapper {
+    .main-content {
+        flex: 1;
+        justify-content: center;
+        align-items: center;
+        gap: 50px;
+        padding-bottom: 20vh;
+
+        input, button {
+            width: 200px;
+        }
+
+        section {
+            align-items: center;
+        }
+
+        .welcome-section {
+            h1 {
+                margin: 0px;
+                font-size: 2rem;
+            }
+
+            p {
+                margin: 0px;
+                font-size: 1.15rem;
+            }
+        }
+
+        .session-id-section {
+            gap: 20px;
+        }
+    }
+}

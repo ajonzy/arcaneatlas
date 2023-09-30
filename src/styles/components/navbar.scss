@@ -1,0 +1,29 @@
+.navbar {
+    flex-direction: row;
+    align-items: center;
+    background: #00000025;
+    padding: 10px 20px;
+}
+
+.logo {
+    font-size: 2rem;
+    width: fit-content;
+    color: white;
+}
+
+ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.nav-items {
+    flex-direction: row;
+    justify-content: space-between;
+    flex: 1;
+
+    li {
+        color: white;
+    }
+}
+

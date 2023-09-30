@@ -1,0 +1,45 @@
+.gm-tools-wrapper {
+    @include toolsStyles();
+
+    .map-select-wrapper {
+        gap: 10px;
+        overflow: scroll;
+
+        .map {
+            @include inputStyles();
+            @include buttonStyles();
+    
+            // width: 75px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            cursor: pointer;
+    
+            &.selected {
+                border-color: #A0522D;
+                box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2), 0 0 15px rgba(0, 4, 245, 0.4);
+            }
+        }
+    }
+
+    .tokens-wrapper {
+        align-items: center;
+
+        .tokens-container {
+            width: 95%;
+            height: 200px;
+            border: 2px solid #8B4513; 
+            background-color: #fdeab5; 
+            box-shadow: inset 0 0 10px rgba(0, 4, 245, 0.2), inset 0 0 100px rgba(0, 4, 245, 0.15); 
+            border-radius: 5px; 
+            overflow: scroll;
+
+            &.empty {
+                justify-content: center;
+                align-items: center;
+                font-size: .9em;
+            }
+        }
+    }
+}
