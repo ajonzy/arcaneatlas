@@ -29,6 +29,11 @@
                 
                 &.revealed {
                     background-color: #8B4513; 
+
+                    &.opened {
+                        max-width: 20px;
+                        max-height: 20px;
+                    }
                 }
             }
             
@@ -40,6 +45,11 @@
 
                     &.discovered {
                         background-color: #DAA520; 
+                    }
+
+                    &.opened {
+                        max-width: 20px;
+                        max-height: 20px;
                     }
                 }
             }

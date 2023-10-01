@@ -5,6 +5,10 @@ import MapPiece from './mapPiece'
 export default function Grid(props) {
     const [isDragging, setIsDragging] = useState(false)
 
+    const grid = []
+
+    useEffect(() => { if (!props.editor) props.setGrid(grid) }, [])
+
     const handleMouseUp = () => {
         setIsDragging(false)
         props.setToggleDirection(null)
@@ -60,9 +64,18 @@ export default function Grid(props) {
                     id={`grid-line-${coords}`} 
                     className={`grid-line grid-line-${direction}`}
                     onMouseOver={isDragging ? handleDragOverLine : null}
-                    style={{ gridRow: Number(x) + 1, gridColumn: Number(y) + 1 }}
+                    style={{ 
+                        gridRow: Number(x) + 1, 
+                        gridColumn: Number(y) + 1,
+                        display: (props.userType === "gm" && props.showGrid === false) || (props.userType === "player" && props.showGridPlayers === false) ? "none" : "flex"
+                    }}
                 >
-                    <MapPiece key={coords} type={props.editor ? `${(props.mapPieces[coords] || "line")} revealed discovered` : props.mapPieces[coords] || "line"} direction={direction} />
+                    <MapPiece 
+                        key={coords} 
+                        type={props.editor || props.userType === "gm" ? `${(props.mapPieces[coords] || "line")} revealed discovered` : props.mapPieces[coords] || "line"} 
+                        direction={direction} 
+                        coords={coords}
+                    />
                 </div> 
             )
         }
@@ -80,11 +93,11 @@ export default function Grid(props) {
                 >
                     <MapPiece 
                         key={coords} 
-                        type={props.editor ? `${(props.mapPieces[coords] || "square")} revealed` : props.mapPieces[coords] || "square"} 
+                        type={props.editor || props.userType === "gm" ? `${(props.mapPieces[coords] || "square")} revealed` : props.mapPieces[coords] || "square"} 
                         coords={coords} 
                         tokenCounter={props.mapPieces.tokenCounter} 
                         increaseTokenCounter={props.increaseTokenCounter}
-                        moveToken={props.moveToken} 
+                        moveToken={props.editor ? () => null : props.moveToken} 
                     />
                 </div> 
             )
@@ -104,12 +117,11 @@ export default function Grid(props) {
                         key={`${token.coords}-${token.mapTokenId}`} 
                         type={"token"} 
                         data={token}
+                        revealed={props.editor || props.userType === "gm" ? true : token.revealed || false}
                     />
                 </div> 
             )
         }
-
-        const grid = []
 
         for (let i=0; i<props.rows; i++) {
             for (let j=0; j<props.columns; j++) {
@@ -132,8 +144,6 @@ export default function Grid(props) {
             buildToken(token)
         ))
 
-        if (!props.editor) props.setGrid(grid)
-
         return grid
     }
 
@@ -152,7 +162,8 @@ export default function Grid(props) {
                     <img src={props.mapImage} alt="Uploaded Map" style={{ 
                         width: props.mapWidth, 
                         height: props.mapHeight,
-                        transform: `translate(${props.mapOffsetX}px, ${props.mapOffsetY}px)`
+                        transform: `translate(${props.mapOffsetX}px, ${props.mapOffsetY}px)`,
+                        display: (props.userType === "gm" && props.showMap === false) || (props.userType === "player" && props.showMapPlayers === false) ? "none" : "inline"
                     }} />
                 )}
             </div>

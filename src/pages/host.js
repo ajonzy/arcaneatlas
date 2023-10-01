@@ -19,6 +19,7 @@ export default function Host() {
     const user = useUserStore(state => state.user)
     const setUser = useUserStore(state => state.setUser)
     const setSessionName = useSessionStore(state => state.setSessionName)
+    const setSessionMap = useSessionStore(state => state.setSessionMap)
     const setData = useSessionStore(state => state.setData)
     const setUserType = useSessionStore(state => state.setUserType)
 
@@ -52,9 +53,13 @@ export default function Host() {
     
     const handleSessionClick = (event, session) => {
         if (event.target.className !== "session-delete") {
+            const selectedMap = session.data?._options?.selectedMap
+
             setSessionName(session.name)
             setData(session.data)
             setUserType("gm")
+            if (selectedMap) setSessionMap(session.data[selectedMap] || {...user.maps.find(map => map.name === selectedMap)})
+
             router.push("/session")
         }
         else {

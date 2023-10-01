@@ -1,22 +1,36 @@
 import { create } from 'zustand'
 
-const useSessionStore = create(set => ({
+const useSessionStore = create((set) => ({
     session: null,
-    setSession: value => set({ session: value }),
     sessionName: null,
-    setSessionName: value => set({ sessionName: value }),
     sessionMap: null,
-    setSessionMap: value => set({ sessionMap: value }),
     players: [],
-    setPlayers: value => set({ players: value }),
     playersCount: 0,
-    setPlayersCount: value => set({ playersCount: value }),
     userType: null,
-    setUserType: value => set({ userType: value }),
     data: null,
-    setData: value => set({ data: value }),
+    socket: null,
     error: null,
-    setError: value => set({ error: value })
-}))
 
-export default useSessionStore
+    setSession: value => set({ session: value }),
+    setSessionName: value => set({ sessionName: value }),
+    setSessionMap: value => set({ sessionMap: value }),
+    setPlayers: value => set({ players: value }),
+    setPlayersCount: value => set({ playersCount: value }),
+    setUserType: value => set({ userType: value }),
+    setData: value => set({ data: value }),
+    setSocket: value => set({ socket: value }),
+    setError: value => set({ error: value }),
+
+    reset: () => set(() => ({
+        session: null,
+        sessionName: null,
+        sessionMap: null,
+        players: [],
+        playersCount: 0,
+        userType: null,
+        socket: null,
+        data: null
+    })),
+}));
+
+export default useSessionStore;

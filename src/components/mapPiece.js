@@ -34,12 +34,12 @@ export default function MapPiece(props) {
     const determineMapPiece = () => {
         switch(props.type.split(" ")[0]) {
             case "wall": return <Wall type={props.type} direction={props.direction} />
-            case "door": return <Door type={props.type} direction={props.direction} />
-            case "hidden-door": return <HiddenDoor type={props.type} direction={props.direction} />
+            case "door": return <Door type={props.type} direction={props.direction} coords={props.coords} />
+            case "hidden-door": return <HiddenDoor type={props.type} direction={props.direction} coords={props.coords} />
             case "window": return <Window type={props.type} direction={props.direction} />
-            case "hidden-window": return <HiddenWindow type={props.type} direction={props.direction} />
+            case "hidden-window": return <HiddenWindow type={props.type} direction={props.direction} coords={props.coords} />
             case "square": return <div className={props.type} ref={ref} />
-            case "token": return <Token token={props.data} />
+            case "token": return <Token token={props.data} revealed={props.data.stance === "player" ? true : props.revealed} />
             case "line": return <div className={`line ${props.direction}`} />
         }
     }

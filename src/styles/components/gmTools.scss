@@ -42,4 +42,12 @@
             }
         }
     }
+
+    .options-wrapper {
+        padding-top: 10px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px 20px;
+    }
 }

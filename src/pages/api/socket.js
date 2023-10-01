@@ -75,6 +75,18 @@ const SocketHandler = (req, res) => {
                 socket.to(sessionId).emit("mapReveal", data)
             })
 
+            socket.on("dataChange", (data, sessionId) => {
+                io.in(sessionId).emit("dataChange", data)
+            })
+
+            socket.on("toggleDoorOpen", (coords, sessionId) => {
+                io.in(sessionId).emit("toggleDoorOpen", coords)
+            })
+
+            socket.on("toggleDiscover", (coords, sessionId) => {
+                io.in(sessionId).emit("toggleDiscover", coords)
+            })
+
             socket.on('disconnect', () => {
                 if (socket.isCreator) {
                     const roomClients = io.sockets.adapter.rooms.get(socket.sessionId) || new Set();
