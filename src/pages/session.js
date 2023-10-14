@@ -199,7 +199,8 @@ export default function Session() {
                 Math.sqrt(Math.pow(selectedX - squareX, 2) + Math.pow(selectedY - squareY, 2)) <= 10 &&
                 !isWallBetween(selectedX, selectedY, squareX, squareY, blockingWalls)
             ) {
-                stateRef.current.sessionMap.pieces[`${squareX}-${squareY}-square`] = "square revealed"
+                const piece = stateRef.current.sessionMap.pieces[`${squareX}-${squareY}-square`]
+                stateRef.current.sessionMap.pieces[`${squareX}-${squareY}-square`] = piece ? `${piece} revealed` : "square revealed"
 
                 const revealedWalls = walls.filter(wall => (
                     wall.key.includes(`vertical-${squareY - .5}-(${squareX - .5}-${squareX + .5})`) || 
@@ -387,15 +388,15 @@ export default function Session() {
             })
             
             socket.on("toggleDiscover", coords => {
-                let wall = stateRef.current.sessionMap.pieces[coords]
+                let piece = stateRef.current.sessionMap.pieces[coords]
 
-                if (!wall.includes("discovered")) wall = `${wall} discovered`
-                else wall = wall.replace(" discovered", "")
+                if (!piece.includes("discovered")) piece = `${piece} discovered`
+                else piece = piece.replace(" discovered", "")
 
-                stateRef.current.sessionMap.pieces[coords] = wall
+                stateRef.current.sessionMap.pieces[coords] = piece
                 setSessionMap({...stateRef.current.sessionMap})
 
-                if (wall.includes("window")) {
+                if (piece.includes("window")) {
                     Object.values(stateRef.current.sessionMap.pieces.tokens)
                     .filter(token => token.stance == "player")
                     .forEach(token => {

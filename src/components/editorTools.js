@@ -6,6 +6,7 @@ import Cropper from 'react-cropper'
 import 'cropperjs/dist/cropper.css'
 import Modal from 'react-modal'
 import imageCompression from 'browser-image-compression'
+import { useDrop } from 'react-dnd'
 
 import useUserStore from '@/stores/useUserStore'
 
@@ -44,6 +45,23 @@ export default function EditorTools(props) {
     })
 
     const router = useRouter()
+    
+    const [, ref] = useDrop({
+        accept: "TOKEN",
+        drop: (item) => {
+            const token = {...item}
+            
+            if (token.mapTokenId) {
+                token.coords = null
+                props.moveToken(token.mapTokenId, token)
+            }
+
+            return { moved: true };
+        },
+        collect: (monitor) => ({
+            isOver: !!monitor.isOver(),
+        }),
+    })
 
     const user = useUserStore(state => state.user)
     const setUser = useUserStore(state => state.setUser)
@@ -347,7 +365,7 @@ export default function EditorTools(props) {
     }
 
     return (
-        <div className={`tools-wrapper editor-tools-wrapper ${imFellEnglish.className}`}>
+        <div className={`tools-wrapper editor-tools-wrapper ${imFellEnglish.className}`} ref={ref}>
             <span className="back-button" onClick={() => router.push("/")}>&#10163;</span>
 
             <h3 onClick={() => toggleToolSection("mapPieces")}>Map Pieces</h3>

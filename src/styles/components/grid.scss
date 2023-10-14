@@ -75,11 +75,27 @@
             }
 
             .trap {
-                background-color: #FF4500; 
+                background-color: #000000; 
+                
+                &.revealed {
+                    background-color: initial;
+
+                    &.discovered {
+                        background-color: #ff000080; 
+                    }
+                }
             }
 
             .secret {
-                background-color: #800080; 
+                background-color: #000000; 
+                
+                &.revealed {
+                    background-color: initial;
+
+                    &.discovered {
+                        background-color: #80008080; 
+                    }
+                }
             }
         }
     }

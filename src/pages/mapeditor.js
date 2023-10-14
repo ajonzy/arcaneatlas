@@ -27,28 +27,31 @@ export default function Home(props) {
             const parentRect = event.currentTarget.getBoundingClientRect();
             const x = event.clientX - parentRect.left;
             const y = event.clientY - parentRect.top;
-    
-            const localX = x / 50
-            const localY = y / 50
-    
-            const dx = localX % 1
-            const dy = localY % 1
-    
-            const direction = (dx < dy && dx < 1 - dy) || (1 - dx < dy && 1 - dx < 1 - dy) ? "vertical" : "horizontal"
-            
-            const i = direction === "horizontal" ? Math.round(localY) : Math.floor(localY)
-            const j = direction === "vertical" ? Math.round(localX) : Math.floor(localX)
-            
-            coords = direction === "horizontal" ? `${i}-${j}-horizontal-${i}-(${j}-${j+1})` : `${i}-${j}-vertical-${j}-(${i}-${i+1})`
-    
-            setToggleDirection(direction)
-            setToggleY(i)
-            setToggleX(j)
+        
+            if (["wall", "door", "hidden-door", "window", "hidden-window"].includes((type || selectedTool))) {
+                const localX = x / 50
+                const localY = y / 50
+        
+                const dx = localX % 1
+                const dy = localY % 1
+        
+                const direction = (dx < dy && dx < 1 - dy) || (1 - dx < dy && 1 - dx < 1 - dy) ? "vertical" : "horizontal"
+                
+                const i = direction === "horizontal" ? Math.round(localY) : Math.floor(localY)
+                const j = direction === "vertical" ? Math.round(localX) : Math.floor(localX)
+                
+                coords = direction === "horizontal" ? `${i}-${j}-horizontal-${i}-(${j}-${j+1})` : `${i}-${j}-vertical-${j}-(${i}-${i+1})`
+        
+                setToggleDirection(direction)
+                setToggleY(i)
+                setToggleX(j)
+            }
+            else coords = `${Math.floor(y / 50) + .5}-${Math.floor(x / 50) + .5}-square`
         }
 
         if (mapPieces[coords] === (type || selectedTool)) {
             delete mapPieces[coords]
-            setTogglePiece("line")
+            setTogglePiece(["wall", "door", "hidden-door", "window", "hidden-window"].includes((type || selectedTool)) ? "line" : "square")
         }
         else {
             mapPieces[coords] = type || selectedTool
@@ -59,7 +62,7 @@ export default function Home(props) {
     }
 
     const setMapPiece = (coords, type=undefined) => {
-        if (type === "line") delete mapPieces[coords]
+        if (type === "line" || type === "square") delete mapPieces[coords]
         else mapPieces[coords] = type || selectedTool
 
         setMapPieces({...mapPieces})
@@ -98,6 +101,7 @@ export default function Home(props) {
                 mapOffsetY={mapOffsetY}
                 setMapOffsetY={setMapOffsetY}
                 setLoading={setLoading}
+                moveToken={moveToken}
             />
             <Grid 
                 columns={columns} 
@@ -110,6 +114,7 @@ export default function Home(props) {
                 mapOffsetX={mapOffsetX}
                 mapOffsetY={mapOffsetY}
                 editor={true}
+                selectedTool={selectedTool}
                 toggleDirection={toggleDirection}
                 setToggleDirection={setToggleDirection}
                 toggleX={toggleX}

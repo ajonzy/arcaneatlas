@@ -26,32 +26,38 @@ export default function Grid(props) {
     }, []);
 
     const handleDragOverSquare = event => {
+        let coords
         const square = event.currentTarget
         const [squareX, squareY] = square.id.split("-").slice(2).map(item => Number(item))
-        
-        const direction = props.toggleDirection
-        const i = props.toggleY
-        const j = props.toggleX
 
-        let ni = squareX - .5
-        let nj = squareY - .5
-
-        const coords = direction === "horizontal" ? `${i}-${nj}-horizontal-${i}-(${nj}-${nj+1})` : `${ni}-${j}-vertical-${j}-(${ni}-${ni+1})`
+        if (["wall", "door", "hidden-door", "window", "hidden-window"].includes(props.selectedTool)) {
+            const direction = props.toggleDirection
+            const i = props.toggleY
+            const j = props.toggleX
+    
+            let ni = squareX - .5
+            let nj = squareY - .5
+    
+            coords = direction === "horizontal" ? `${i}-${nj}-horizontal-${i}-(${nj}-${nj+1})` : `${ni}-${j}-vertical-${j}-(${ni}-${ni+1})`
+        }
+        else coords = `${squareX}-${squareY}-square`
 
         props.setMapPiece(coords, props.togglePiece)
     }
 
     const handleDragOverLine = event => {
-        const line = event.currentTarget
-        const [lineX, lineY] = line.id.split("-").slice(2, 4).map(item => Number(item))
-        
-        const direction = props.toggleDirection
-        const i = props.toggleY
-        const j = props.toggleX
-        
-        const coords = direction === "horizontal" ? `${i}-${lineY}-horizontal-${i}-(${lineY}-${lineY+1})` : `${lineX}-${j}-vertical-${j}-(${lineX}-${lineX+1})`
-
-        props.setMapPiece(coords, props.togglePiece)
+        if (["wall", "door", "hidden-door", "window", "hidden-window"].includes(props.selectedTool)) {
+            const line = event.currentTarget
+            const [lineX, lineY] = line.id.split("-").slice(2, 4).map(item => Number(item))
+            
+            const direction = props.toggleDirection
+            const i = props.toggleY
+            const j = props.toggleX
+            
+            const coords = direction === "horizontal" ? `${i}-${lineY}-horizontal-${i}-(${lineY}-${lineY+1})` : `${lineX}-${j}-vertical-${j}-(${lineX}-${lineX+1})`
+    
+            props.setMapPiece(coords, props.togglePiece)
+        }
     }
 
     const buildGrid = () => {
@@ -93,11 +99,11 @@ export default function Grid(props) {
                 >
                     <MapPiece 
                         key={coords} 
-                        type={props.editor || props.userType === "gm" ? `${(props.mapPieces[coords] || "square")} revealed` : props.mapPieces[coords] || "square"} 
+                        type={props.editor || props.userType === "gm" ? `${(props.mapPieces[coords] || "square")} revealed discovered` : props.mapPieces[coords] || "square"} 
                         coords={coords} 
                         tokenCounter={props.mapPieces.tokenCounter} 
                         increaseTokenCounter={props.increaseTokenCounter}
-                        moveToken={props.editor ? () => null : props.moveToken} 
+                        moveToken={props.moveToken} 
                     />
                 </div> 
             )

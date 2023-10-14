@@ -7,6 +7,8 @@ import HiddenDoor from './mapPieces/hiddenDoor'
 import Window from './mapPieces/window'
 import HiddenWindow from './mapPieces/hiddenWindow'
 import Token from './token'
+import Trap from './mapPieces/trap'
+import Secret from './mapPieces/secret'
 
 export default function MapPiece(props) {
     const [, ref] = useDrop({
@@ -39,6 +41,8 @@ export default function MapPiece(props) {
             case "window": return <Window type={props.type} direction={props.direction} />
             case "hidden-window": return <HiddenWindow type={props.type} direction={props.direction} coords={props.coords} />
             case "square": return <div className={props.type} ref={ref} />
+            case "trap": return <Trap type={props.type} coords={props.coords} ref={ref} />
+            case "secret": return <Secret type={props.type} coords={props.coords} ref={ref} />
             case "token": return <Token token={props.data} revealed={props.data.stance === "player" ? true : props.revealed} />
             case "line": return <div className={`line ${props.direction}`} />
         }
