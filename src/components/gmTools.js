@@ -1,12 +1,14 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { IM_Fell_English } from "@next/font/google"
 import { useRouter } from 'next/router'
-import { useDrop } from 'react-dnd'
+import { useDrag, useDrop } from 'react-dnd'
+import { getEmptyImage } from "react-dnd-html5-backend"
 
 import useUserStore from '@/stores/useUserStore'
 import useSessionStore from '@/stores/useSessionStore'
 
 import Token from './token'
+import Image from 'next/image'
 
 const imFellEnglish = IM_Fell_English({subsets: ["latin"], weight: "400"})
 
@@ -17,8 +19,12 @@ export default function GMTools(props) {
         players: true,
         mapSelect: true,
         tokens: false,
-        options: false
+        options: false,
+        templates: false
     })
+    const [templateType, setTemplateType] = useState("cone")
+    const [templateSize, setTemplateSize] = useState("15")
+    const [templateDirection, setTemplateDirection] = useState("N")
     
     const user = useUserStore(state => state.user)
     const session = useSessionStore(state => state.session)
@@ -53,6 +59,23 @@ export default function GMTools(props) {
             isOver: !!monitor.isOver(),
         }),
     })
+
+    const [{ isDragging }, drag, dragPreview] = useDrag(() => ({
+        type: 'TEMPLATE',
+        item: () => { 
+            return { 
+                src: `${templateType}${templateDirection}${templateSize}`,
+                type: "template"
+            }
+        },
+        collect: (monitor) => ({
+            isDragging: monitor.isDragging(),
+        }),
+    }), [templateType, templateDirection, templateSize])
+
+    useEffect(() => {
+        dragPreview(getEmptyImage(), { captureDraggingState: true });
+    }, [])
 
     const toggleToolSection = section => {
         sectionsOpened[section] = !sectionsOpened[section]
@@ -125,6 +148,113 @@ export default function GMTools(props) {
         props.socket.emit("dataChange", compressedData, session)
     }
 
+    const generateTemplateSizeSelect = () => {
+        switch(templateType) {
+            case "cone": return (
+                <select value={templateSize} onChange={event => setTemplateSize(event.target.value)}>
+                    <option value="15">15 Feet</option>
+                    <option value="30">30 Feet</option>
+                    <option value="60">60 Feet</option>
+                </select>
+            )
+            case "burst": return (
+                <select value={templateSize} onChange={event => setTemplateSize(event.target.value)}>
+                    <option value="5">5 Feet</option>
+                    <option value="10">10 Feet</option>
+                    <option value="15">15 Feet</option>
+                    <option value="20">20 Feet</option>
+                    <option value="30">30 Feet</option>
+                </select>
+            )
+            case "emanation": return (
+                <select value={templateSize} onChange={event => setTemplateSize(event.target.value)}>
+                    <option value="5">5 Feet</option>
+                    <option value="10">10 Feet</option>
+                    <option value="Large5">5 Feet (Large Creature)</option>
+                    <option value="Large10">10 Feet (Large Creature)</option>
+                </select>
+            )
+            case "line": return (
+                <select value={templateSize} onChange={event => setTemplateSize(event.target.value)}>
+                    <option value="30">30 Feet</option>
+                    <option value="60">60 Feet</option>
+                </select>
+            )
+            default: return null
+        }
+    }
+
+    const generateTemplateDirectionSelect = () => {
+        switch(templateType) {
+            case "cone": return (
+                <select value={templateDirection} onChange={event => setTemplateDirection(event.target.value)}>
+                    <option value="N">North</option>
+                    <option value="NE">North East</option>
+                    <option value="E">East</option>
+                    <option value="SE">South East</option>
+                    <option value="S">South</option>
+                    <option value="SW">South West</option>
+                    <option value="w">West</option>
+                    <option value="NW">North West</option>
+                </select>
+            )
+            case "line": return (
+                <select value={templateDirection} onChange={event => setTemplateDirection(event.target.value)}>
+                    <option value="N">North</option>
+                    <option value="NNE">North North East</option>
+                    <option value="NEE">North East East</option>
+                    <option value="NE">North East</option>
+                    <option value="ENN">East North North</option>
+                    <option value="EEN">East East North</option>
+                    <option value="E">East</option>
+                    <option value="EES">East East South</option>
+                    <option value="ESS">East South South</option>
+                    <option value="SE">South East</option>
+                    <option value="SEE">South East East</option>
+                    <option value="SSE">South South East</option>
+                    <option value="S">South</option>
+                    <option value="SSW">South South West</option>
+                    <option value="SWW">South West West</option>
+                    <option value="SW">South West</option>
+                    <option value="WSS">West South South</option>
+                    <option value="WWS">West West South</option>
+                    <option value="W">West</option>
+                    <option value="WWN">West West North</option>
+                    <option value="WNN">West North North</option>
+                    <option value="NW">North West</option>
+                    <option value="NWW">North West West</option>
+                    <option value="NNW">North North West</option>
+                </select>
+            )
+            default: return null
+        }
+    }
+
+    const handleTemplateChange = event => {
+        const newType = event.target.value 
+
+        switch (newType) {
+            case "cone": {
+                setTemplateSize("15")
+                setTemplateDirection("N")
+                break
+            }
+            case "burst":
+            case "emanation": {
+                setTemplateSize("5")
+                setTemplateDirection("")
+                break
+            }
+            case "line": {
+                setTemplateSize("30")
+                setTemplateDirection("N")
+                break
+            }
+        }
+
+        setTemplateType(newType)
+    }
+
     return (
         <div className={`tools-wrapper gm-tools-wrapper ${imFellEnglish.className}`} ref={ref}>
             <span className="back-button" onClick={() => router.push("/host")}>&#10163;</span>
@@ -189,6 +319,29 @@ export default function GMTools(props) {
                     <input type="checkbox" disabled={!sessionMap ? true : false} checked={isShowMapCheckedPlayers} onChange={() => toggleCheckmark("showMapPlayers", isShowMapCheckedPlayers, setIsShowMapCheckedPlayers, "local")} />
                     <span className="checkmark" />
                 </label>
+            </div>
+
+            <hr />
+
+            <h3 onClick={() => toggleToolSection("templates")}>Templates</h3>
+
+            <div className={`tools-section templates-wrapper ${sectionsOpened.templates ? "opened" : ""}`}>
+                <div className="template-options">
+                    <select value={templateType} onChange={event => handleTemplateChange(event)}>
+                        <option value="cone">Cone</option>
+                        <option value="burst">Burst</option>
+                        <option value="emanation">Emanation</option>
+                        <option value="line">Line</option>
+                    </select>
+                    
+                    {generateTemplateSizeSelect()}
+
+                    {generateTemplateDirectionSelect()}
+                </div>
+
+                <div className="template-image">
+                    <Image ref={drag} src={`/templates/${templateType}${templateDirection}${templateSize}.png`} fill style={{objectFit: "contain", objectPosition: "top"}} alt="template" />
+                </div>
             </div>
         </div>
     )

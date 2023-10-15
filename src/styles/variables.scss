@@ -82,6 +82,28 @@
             }
         }
     }
+
+    .templates-wrapper {
+        align-items: center;
+        gap: 20px;
+
+        .template-options {
+            flex-direction: row;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .template-image {
+            position: relative;
+            width: 150px;
+            height: 150px;
+
+            img {
+                opacity: .5;
+            }
+        }
+    }
 }
 
 @mixin disabledStyles($type: "button") {

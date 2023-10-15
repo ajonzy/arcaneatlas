@@ -7,7 +7,7 @@ export default function Grid(props) {
 
     const grid = []
 
-    useEffect(() => { if (!props.editor) props.setGrid(grid) }, [])
+    useEffect(() => { if (!props.editor) props.setGrid(grid) }, [props.mapPieces])
 
     const handleMouseUp = () => {
         setIsDragging(false)

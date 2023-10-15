@@ -5,7 +5,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 
 import useUserStore from '@/stores/useUserStore'
 
-import CustomDragLayer from '@/components/tokenDrag';
+import CustomDragLayer from '@/components/customDragLayer';
 import Loader from '@/components/loader'
 
 import '@/styles/main.scss'

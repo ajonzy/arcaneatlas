@@ -330,7 +330,7 @@ export default function EditorTools(props) {
         props.setMapWidth(map.layout.mapWidth)
         props.setMapHeight(map.layout.mapHeight)
         props.setMapOffsetX(map.layout.mapOffsetX)
-        props.setMapOffsetY(map.layout.setMapOffsetY)
+        props.setMapOffsetY(map.layout.mapOffsetY)
 
         if (map.image) {
             props.setMapImage(map.image)

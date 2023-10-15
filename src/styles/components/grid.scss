@@ -3,6 +3,12 @@
         .map-piece, .map-piece * {
             height: 100%;
             width: 100%;
+            position: relative;
+
+            .template {
+                position: absolute;
+                z-index: 50;
+            }
 
             .line {
                 background-color: #CCCCCC; 
@@ -13,6 +19,10 @@
                 
                 &.revealed {
                     background-color: initial;
+                    
+                    &.shrouded {
+                        background-color: #00000070; 
+                    }
                 }
             }
             
@@ -82,6 +92,10 @@
 
                     &.discovered {
                         background-color: #ff000080; 
+                        
+                        &.shrouded {
+                            background-color: #83000070; 
+                        }
                     }
                 }
             }
@@ -93,7 +107,11 @@
                     background-color: initial;
 
                     &.discovered {
-                        background-color: #80008080; 
+                        background-color: #ff00ff80; 
+                        
+                        &.shrouded {
+                            background-color: #80008070; 
+                        }
                     }
                 }
             }
@@ -101,10 +119,10 @@
     }
 
     margin: 20px;
+    margin-left: 340px;
     background-color: white;
     overflow: hidden;
     position: relative;
-    transform: translateX(320px);
     
     .grid-wrapper {
         width: fit-content;

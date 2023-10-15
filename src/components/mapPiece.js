@@ -1,5 +1,6 @@
-import React from 'react'
-import { useDrop } from 'react-dnd'
+import React, { useEffect, useState } from 'react'
+import { useDrag, useDrop } from 'react-dnd'
+import { getEmptyImage } from 'react-dnd-html5-backend'
 
 import Wall from './mapPieces/wall'
 import Door from './mapPieces/door'
@@ -9,29 +10,59 @@ import HiddenWindow from './mapPieces/hiddenWindow'
 import Token from './token'
 import Trap from './mapPieces/trap'
 import Secret from './mapPieces/secret'
+import Image from 'next/image'
+
+import { templateSizes } from '@/utils/templates'
 
 export default function MapPiece(props) {
+    const [template, setTemplate] = useState(null)
+    const [dragging, setDragging] = useState(false)
+
     const [, ref] = useDrop({
-        accept: "TOKEN",
+        accept: ["TOKEN", "TEMPLATE"],
         drop: (item) => {
-            const token = {...item}
-            
-            if (token.mapTokenId === undefined) {
-                token.mapTokenId = props.tokenCounter
-                props.increaseTokenCounter()
+            if (item.type === "token") {
+                const token = {...item}
+                
+                if (token.mapTokenId === undefined) {
+                    token.mapTokenId = props.tokenCounter
+                    props.increaseTokenCounter()
+                }
+                
+                const [dropX, dropY, _] = props.coords.split("-")
+                token.coords = `${dropX}-${dropY}-token`
+    
+                props.moveToken(token.mapTokenId, token)
+    
+                return { moved: true };
             }
-            
-            const [dropX, dropY, _] = props.coords.split("-")
-            token.coords = `${dropX}-${dropY}-token`
-
-            props.moveToken(token.mapTokenId, token)
-
-            return { moved: true };
+            else if (item.type === "template") {
+                setTemplate(item.src)
+            }
         },
         collect: (monitor) => ({
             isOver: !!monitor.isOver(),
         }),
     })
+
+    // const [{ isDragging }, drag, dragPreview] = useDrag(() => ({
+    //     type: 'TEMPLATE',
+    //     item: () => { 
+    //         setDragging(true)
+
+    //         return { 
+    //             src: template,
+    //             type: "template"
+    //         }
+    //     },
+    //     collect: (monitor) => ({
+    //         isDragging: monitor.isDragging(),
+    //     }),
+    // }))
+
+    // useEffect(() => {
+    //     dragPreview(getEmptyImage(), { captureDraggingState: true });
+    // }, [])
 
     const determineMapPiece = () => {
         switch(props.type.split(" ")[0]) {
@@ -50,6 +81,11 @@ export default function MapPiece(props) {
 
     return (
         <div className="map-piece">
+            {template && (
+                <div onClick={() => setTemplate(null)} className="template" style={{ width: `${templateSizes(template).width}px`, height: `${templateSizes(template).height}px` }}>
+                    <Image src={`/templates/${template}.png`} {...templateSizes(template)} alt="template" />
+                </div>
+            )}
             {determineMapPiece()}
         </div>
     )

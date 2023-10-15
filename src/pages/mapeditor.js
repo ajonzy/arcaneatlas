@@ -4,7 +4,7 @@ import Grid from '@/components/grid'
 import EditorTools from '@/components/editorTools'
 import Loader from '@/components/loader'
 
-export default function Home(props) {
+export default function MapEditor(props) {
     const [loading, setLoading] = useState(true)
     const [columns, setColumns] = useState(5)
     const [rows, setRows] = useState(5)

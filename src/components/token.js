@@ -6,13 +6,12 @@ export default function Token({ token, revealed=true }) {
     const [{ isDragging }, drag, dragPreview] = useDrag(() => ({
         type: 'TOKEN',
         item: () => { 
-            // console.log({...token})
-            return {...token}
+            return {...token, type: "token"}
         },
         collect: (monitor) => ({
             isDragging: monitor.isDragging(),
         }),
-    }));
+    }))
 
     useEffect(() => {
         dragPreview(getEmptyImage(), { captureDraggingState: true });

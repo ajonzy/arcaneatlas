@@ -182,6 +182,11 @@ export default function Session() {
         .filter(item => item.props.className === "grid-square")
         .slice(Math.max((selectedX * stateRef.current.sessionMap.layout.columns) - (11 * stateRef.current.sessionMap.layout.columns) + (selectedY - 10), 0), (selectedX * stateRef.current.sessionMap.layout.columns) + (11 * stateRef.current.sessionMap.layout.columns) + (selectedY + 10))
         .filter(item => item.key.split("-")[3] >= selectedY - 10 && item.key.split("-")[3] <= selectedY + 10)
+        .filter(item => {
+            const [squareX, squareY] = item.key.split("-").slice(2,4).map(coord => Number(coord))
+            const piece = stateRef.current.sessionMap.pieces[`${squareX}-${squareY}-square`]
+            return (!piece || (!piece.includes("revealed") || piece.includes("shrouded")))
+        })
 
         const walls = stateRef.current.grid.filter(item => ["wall", "door", "window", "hidden-door", "hidden-window"].some(type => stateRef.current.sessionMap.pieces[item.key.split("-").slice(2).join("-")]?.includes(type))).filter(item => {
             const [lineX, lineY] = item.key.split("-").slice(2,4).map(coord => Number(coord))
@@ -192,6 +197,41 @@ export default function Session() {
 
         const blockingWalls = walls.filter(wall => !["window", "hidden-window discovered", "door opened", "hidden-door opened", "hidden-door discovered opened", "hidden-door opened discovered"].some(type => stateRef.current.sessionMap.pieces[wall.key.split("-").slice(2).join("-")]?.replace(" revealed", "") === type))
 
+        const revealedSquares = stateRef.current.grid
+        .filter(item => item.props.className === "grid-square")
+        .filter(item => {
+            const [squareX, squareY] = item.key.split("-").slice(2,4).map(coord => Number(coord))
+            const piece = stateRef.current.sessionMap.pieces[`${squareX}-${squareY}-square`]
+            return (piece && (piece.includes("revealed") && !piece.includes("shrouded")))
+        })
+
+        revealedSquares.forEach(square => {
+            const [squareX, squareY] = square.key.split("-").slice(2,4).map(coord => Number(coord))
+            const players = Object.values(stateRef.current.sessionMap.pieces.tokens).filter(token => token.stance === "player")
+            let shrouded = true
+
+            players.some(player => {
+                const [playerX, playerY] = player.coords.split("-").map(coord => Number(coord))
+
+                if (!isWallBetween(squareX, squareY, playerX, playerY, blockingWalls)) {
+                    shrouded = false
+                    return true
+                }
+
+                return false
+            })
+
+            if (shrouded) {
+                let piece = stateRef.current.sessionMap.pieces[`${squareX}-${squareY}-square`]
+                stateRef.current.sessionMap.pieces[`${squareX}-${squareY}-square`] = `${piece} shrouded`
+
+                Object.values(stateRef.current.sessionMap.pieces.tokens).forEach(token => {
+                    const [tokenX, tokenY] = token.coords.split("-").slice(0, 2).map(coord => Number(coord)) 
+                    if (tokenX === squareX && tokenY === squareY) token.revealed = false
+                })
+            }
+        })
+
         squares.forEach(square => {
             const [squareX, squareY] = square.key.split("-").slice(2,4).map(coord => Number(coord))
 
@@ -199,7 +239,8 @@ export default function Session() {
                 Math.sqrt(Math.pow(selectedX - squareX, 2) + Math.pow(selectedY - squareY, 2)) <= 10 &&
                 !isWallBetween(selectedX, selectedY, squareX, squareY, blockingWalls)
             ) {
-                const piece = stateRef.current.sessionMap.pieces[`${squareX}-${squareY}-square`]
+                let piece = stateRef.current.sessionMap.pieces[`${squareX}-${squareY}-square`]
+                piece = piece?.replace(" revealed", "").replace(" shrouded", "")
                 stateRef.current.sessionMap.pieces[`${squareX}-${squareY}-square`] = piece ? `${piece} revealed` : "square revealed"
 
                 const revealedWalls = walls.filter(wall => (
@@ -476,7 +517,7 @@ export default function Session() {
                     mapHeight={sessionMap?.layout.mapHeight}
                     mapOffsetX={sessionMap?.layout.mapOffsetX}
                     mapOffsetY={sessionMap?.layout.mapOffsetY}
-                    setGrid={grid.length ? () => null : setGrid}
+                    setGrid={setGrid}
                     increaseTokenCounter={increaseTokenCounter}
                     moveToken={moveToken}
                     userType={data._options.playerView ? "player" : userType}
