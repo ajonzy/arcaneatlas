@@ -270,19 +270,21 @@ export default function Session() {
             socket = io(undefined, {
                 path: '/api/socket_io',
             })
+
+            const generateSessionId = () => new Array(5).fill("").reduce((id, _) => id + "ABCDEFGHJKMNPQRSTUVWXYZ"[Math.floor(Math.random() * 23)], "")
     
             socket.on('connect', () => {
                 console.log("Connected to socket")
 
                 if (userType === "gm") {
-                    const sessionId = Math.random().toString(36).substring(2, 11)
+                    const sessionId = generateSessionId()
                     socket.emit("createSession", sessionId)
                 }
                 else socket.emit("joinSession", session)
             });
             
             socket.on("roomExists", () => {
-                const sessionId = Math.random().toString(36).substring(2, 11)
+                const sessionId = generateSessionId()
                 socket.emit("createSession", sessionId)
             })
             

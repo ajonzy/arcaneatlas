@@ -18,7 +18,7 @@ export default function Home() {
     const router = useRouter()
 
     const handleJoin = () => {
-        setSession(sessionId)
+        setSession(sessionId.toUpperCase())
         setUserType("player")
         router.push("/session")
     }
