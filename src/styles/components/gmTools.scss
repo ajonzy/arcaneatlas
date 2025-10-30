@@ -3,7 +3,11 @@
 
     .map-select-wrapper {
         gap: 10px;
-        overflow: scroll;
+
+        &.opened {
+            overflow: scroll;
+            min-height: 300px;
+        }
 
         .map {
             @include inputStyles();
